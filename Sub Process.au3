@@ -1,11 +1,30 @@
-#cs ----------------------------------------------------------------------------
+For $i = 0 To 100
+	Local $response = ConsoleRead()
+	If StringRight($response, 1) = ';' Then  ; Check for any commands during runtime
+		If StringInStr($response, 'PLAYPAUSE', 1) Then
+			$response = ''
+			Do  ; Wait to be resumed
+				$response &= ConsoleRead()
+				Sleep(250)
+			Until StringRight($response, 1) = ';'
+		EndIf
+	EndIf
 
- AutoIt Version: 3.3.15.0 (Beta)
- Author:         myName
+	ConsoleWrite($i & @CRLF)  ; Send progress to Main Process
 
- Script Function:
-	Template AutoIt script.
+	If $i = 5 Or $i = 10 Then  ; Simulate an error
+		ConsoleWrite('Phony Error at ' & $i & '. Waiting for user response...' & @CRLF)
 
-#ce ----------------------------------------------------------------------------
+		Do  ; Wait for a response from the main process for what to do
+			$response &= ConsoleRead()
+			Sleep(250)
+		Until StringRight($response, 1) = ';'
 
-; Script Start - Add your code below here
+		If StringInStr($response, 'EXIT') Then Exit
+	EndIf
+	Sleep(250)
+Next
+
+ConsoleWrite('DONE')
+Sleep(250)
+Exit
