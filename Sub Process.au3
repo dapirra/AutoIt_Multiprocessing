@@ -25,6 +25,6 @@ For $i = 0 To 100
 	Sleep(250)
 Next
 
-ConsoleWrite('DONE')
+ConsoleWrite('DONE' & @CRLF)
 Sleep(250)
 Exit

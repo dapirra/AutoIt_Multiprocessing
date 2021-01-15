@@ -1,4 +1,5 @@
 #include <AutoItConstants.au3>
+#include <EditConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
 #include <StringConstants.au3>
@@ -21,14 +22,19 @@ Main()
 Func Main()
 	; Create the GUI
 	$MainGUI = GUICreate($WIN_TITLE, 500, 300)
-	$SubToMainTextBox = GUICtrlCreateEdit('', 20, 20, 460, 195)
+	$SubToMainTextBox = GUICtrlCreateEdit('', 20, 20, 460, 195, BitOR($GUI_SS_DEFAULT_EDIT, $ES_READONLY))
 	$ProgressBar = GUICtrlCreateProgress(20, 220, 460, 30)
 
-	$StartButton = GUICtrlCreateButton("Start", 20, 255, 85, 25)
-	$StopButton = GUICtrlCreateButton("Stop", 110, 255, 85, 25)
-	$PlayPauseButton = GUICtrlCreateButton("Play/Pause", 200, 255, 85, 25)
-	$ClearButton = GUICtrlCreateButton("Clear", 290, 255, 85, 25)
-	$QuitButton = GUICtrlCreateButton("Quit", 380, 255, 100, 25)
+	Local $x = 20, $y = 255, $w = 80, $h = 25
+	$StartButton = GUICtrlCreateButton("Start", $x, $y, $w, $h)
+	$x += 95
+	$StopButton = GUICtrlCreateButton("Stop", $x, $y, $w, $h)
+	$x += 95
+	$PlayPauseButton = GUICtrlCreateButton("Play/Pause", $x, $y, $w, $h)
+	$x += 95
+	$ClearButton = GUICtrlCreateButton("Clear", $x, $y, $w, $h)
+	$x += 95
+	$QuitButton = GUICtrlCreateButton("Quit", $x, $y, $w, $h)
 
 	GUICtrlSetState($StartButton, $GUI_FOCUS)
 	GUICtrlSetState($StopButton, $GUI_DISABLE)
@@ -86,7 +92,7 @@ Func CheckSubProcess()  ; Checks every 250ms once registered
 	EndIf
 
 	If StringInStr($LastReadData, 'Error') Then  ; Check for Error
-		If MsgBox(BitOR($MB_ICONERROR, $MB_YESNO), $WIN_TITLE, 'A Phony Error has occured.@CRLF@Continue?', 0, $MainGUI) = $IDYES Then
+		If MsgBox(BitOR($MB_ICONERROR, $MB_YESNO), $WIN_TITLE, 'A Phony Error has occured on the subprocess.@CRLF@Continue?', 0, $MainGUI) = $IDYES Then
 			StdinWrite($SubProcessPID, 'CONTINUE;')
 		Else
 			StdinWrite($SubProcessPID, 'EXIT;')
